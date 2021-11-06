@@ -9,7 +9,6 @@ import fitnus.tracker.Entry;
 import fitnus.tracker.Food;
 import fitnus.parser.Parser;
 import fitnus.tracker.MealType;
-import fitnus.storage.Storage;
 import fitnus.utility.Ui;
 
 import java.time.LocalDate;
@@ -41,7 +40,7 @@ public class EntryDatabase {
     }
 
     /**
-     * Adds an Entry to the database.
+     * Adds an Entry object to the database.
      *
      * @param entry The Entry object to be added.
      */
@@ -50,7 +49,7 @@ public class EntryDatabase {
     }
 
     /**
-     * Sorts the Entry objects in the database in ascending order of date.
+     * Sorts the Entry objects in the database in ascending order by date.
      */
     public void sortDatabase() {
         entries.sort(Comparator.comparing(Entry::getDate));
@@ -108,7 +107,7 @@ public class EntryDatabase {
     }
 
     /**
-     * Preloads the database.
+     * Preloads the database from data text file.
      *
      * @param reader Reads from the file.
      * @throws IOException If an I/O error occurs.
@@ -171,7 +170,7 @@ public class EntryDatabase {
      */
     public String listEntries() {
         if (entries.size() == 0) {
-            return "Sorry, there is not any record stored";
+            return "Oops, there are no records found!";
         }
         String result = "";
         for (int i = 1; i <= entries.size(); i++) {
@@ -199,10 +198,10 @@ public class EntryDatabase {
     }
 
     /**
-     * Returns the Entry objects from the specified number of past days.
+     * Returns an EntryDatabase with all Entry objects added in the past specified number of days.
      *
      * @param days The specified number of past days.
-     * @return An ArrayList containing Entry objects from the specified number of past days.
+     * @return An EntryDatabase containing Entry objects from the specified number of past days.
      */
     public EntryDatabase getPastDaysEntryDatabase(int days) {
         sortDatabase();
@@ -211,7 +210,6 @@ public class EntryDatabase {
 
         LocalDate datePointer = LocalDate.now();
         int count = totalEntries.size() - 1;
-
         for (int i = 0; count >= 0 && i < days; i++) {
             while (count >= 0 && totalEntries.get(count).getRawDate().equals(datePointer)) {
                 pastDaysEntries.addEntry(totalEntries.get(count));
@@ -224,9 +222,9 @@ public class EntryDatabase {
     }
 
     /**
-     * Returns the Entry objects from within the current month.
+     * Returns an EntryDatabase with all Entry objects added in the current month.
      *
-     * @return An ArrayList containing Entry objects from the current month.
+     * @return An EntryDatabase containing Entry objects from the current month.
      */
     public EntryDatabase getPastMonthEntryDatabase() {
         sortDatabase();
@@ -235,7 +233,6 @@ public class EntryDatabase {
 
         Month monthPointer = LocalDate.now().getMonth();
         int count = totalEntries.size() - 1;
-
         while (count >= 0 && totalEntries.get(count).getRawDate().getMonth().equals(monthPointer)) {
             pastMonthEntries.addEntry(totalEntries.get(count));
             count--;
